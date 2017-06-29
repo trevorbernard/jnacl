@@ -9,12 +9,12 @@
 
   <name>${project.groupId}:${project.artifactId}</name>
   <description>Pure Java implementation of NaCl: Networking and Cryptography library.</description>
-  <url>https://github.com/nitram509/jnacl</url>
+  <url>https://github.com/trevorbernard/jnacl</url>
 
   <scm>
-    <url>scm:git:git@github.com:nitram509/jmacaroons.git</url>
-    <connection>scm:git:git@github.com:nitram509/jmacaroons.git</connection>
-    <developerConnection>scm:git:git@github.com:nitram509/jmacaroons.git</developerConnection>
+    <url>git@github.com:trevorbernard/jnacl.git</url>
+    <connection>scm:git:git@github.com:trevorbernard/jnacl.git</connection>
+    <developerConnection>scm:git:git@github.com:trevorbernard/jnacl.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
