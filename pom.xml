@@ -39,22 +39,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <manifest-file>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifest-file>
   </properties>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>6.8.8</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.easytesting</groupId>
-      <artifactId>fest-assert</artifactId>
-      <version>1.4</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 
   <distributionManagement>
     <snapshotRepository>
@@ -67,18 +53,66 @@
     </repository>
   </distributionManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.testng</groupId>
+      <artifactId>testng</artifactId>
+      <version>6.13.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.easytesting</groupId>
+      <artifactId>fest-assert</artifactId>
+      <version>1.4</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.7.0</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+        <configuration>
+          <archive>
+            <manifestFile>${manifest-file}</manifestFile>
+          </archive>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>biz.aQute.bnd</groupId>
+        <artifactId>bnd-maven-plugin</artifactId>
+        <version>3.5.0</version>
+        <configuration>
+          <manifestPath>${manifest-file}</manifestPath>
+          <bnd><![CDATA[
+Bundle-SymbolicName: ${project.groupId}.${project.artifactId}
+-exportcontents: com.neilalexander.jnacl.crypto, com.neilalexander.jnacl
+]]>
+          </bnd>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>bnd-process</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
@@ -91,11 +125,22 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <archive>
+            <manifestFile>${manifest-file}</manifestFile>
+          </archive>
+        </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.4</version>
+        <version>3.0.0</version>
+        <configuration>
+          <archive>
+            <manifestFile>${manifest-file}</manifestFile>
+          </archive>
+        </configuration>
         <executions>
           <execution>
             <id>attach-javadocs</id>
@@ -105,18 +150,24 @@
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>2.5.3</version>
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>
+          <archive>
+            <manifestFile>${manifest-file}</manifestFile>
+          </archive>
         </configuration>
       </plugin>
 
     </plugins>
   </build>
+
   <profiles>
+
     <profile>
       <id>doclint-java8-disable</id>
       <activation>
@@ -130,6 +181,9 @@
             <version>2.9.1</version>
             <configuration>
               <additionalparam>-Xdoclint:none</additionalparam>
+              <archive>
+                <manifestFile>${manifest-file}</manifestFile>
+              </archive>
             </configuration>
             <executions>
               <execution>
@@ -143,6 +197,7 @@
         </plugins>
       </build>
     </profile>
+
     <profile>
       <id>release-sign-artifacts</id>
       <activation>
@@ -170,6 +225,7 @@
         </plugins>
       </build>
     </profile>
+
   </profiles>
 
 </project>
